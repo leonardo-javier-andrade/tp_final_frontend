@@ -1,23 +1,19 @@
-import { useEffect, useState } from "react"
-import "../../styles/ProductForm.css"
+import { useState } from "react"
+import "../styles/ProductForm.css"
 
 const emptyProduct = { name: "", price: 0, category: "", stock: 0 }
 
 const ProductForm = ({ initialProduct, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState(emptyProduct)
-
-  useEffect(() => {
-    if (initialProduct) {
-      setFormData({
-        name: initialProduct.name,
-        price: initialProduct.price,
-        category: initialProduct.category,
-        stock: initialProduct.stock
-      })
-    } else {
-      setFormData(emptyProduct)
-    }
-  }, [initialProduct])
+  const [formData, setFormData] = useState(
+    initialProduct
+      ? {
+          name: initialProduct.name,
+          price: initialProduct.price,
+          category: initialProduct.category,
+          stock: initialProduct.stock
+        }
+      : emptyProduct
+  )
 
   const handleChange = (event) => {
     const { name, value } = event.target

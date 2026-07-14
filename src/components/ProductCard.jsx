@@ -1,4 +1,4 @@
-import "../../styles/ProductCard.css"
+import "../styles/ProductCard.css"
 
 const ProductCard = ({ product, isAdmin, onEdit, onDelete }) => {
   return (

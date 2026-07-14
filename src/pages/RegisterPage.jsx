@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import { useAuth } from "../../context/AuthContext.jsx"
-import "../../styles/AuthPages.css"
+import { AuthContext } from "../context/AuthContext.jsx"
+import "../styles/AuthPages.css"
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("")
@@ -11,7 +11,7 @@ const RegisterPage = () => {
   const [success, setSuccess] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
-  const { register } = useAuth()
+  const { register } = useContext(AuthContext)
   const navigate = useNavigate()
 
   const handleSubmit = async (event) => {

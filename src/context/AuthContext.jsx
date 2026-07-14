@@ -1,44 +1,31 @@
-import { createContext, useContext, useEffect, useState } from "react"
-import {
-  login as loginController,
-  register as registerController,
-  logout as logoutController,
-  getStoredUser
-} from "../controllers/authController.js"
+import { createContext, useState } from "react"
+import { login as loginService, register as registerService, logout as logoutService, getStoredUser } from "../services/authService.js"
 
-const AuthContext = createContext(null)
+const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    setUser(getStoredUser())
-    setLoading(false)
-  }, [])
+  const [user, setUser] = useState(getStoredUser())
 
   const login = async (email, password) => {
-    const loggedUser = await loginController(email, password)
+    const loggedUser = await loginService(email, password)
     setUser(loggedUser)
     return loggedUser
   }
 
   const register = async (username, email, password) => {
-    return registerController(username, email, password)
+    return registerService(username, email, password)
   }
 
   const logout = () => {
-    logoutController()
+    logoutService()
     setUser(null)
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   )
 }
 
-const useAuth = () => useContext(AuthContext)
-
-export { AuthProvider, useAuth }
+export { AuthContext, AuthProvider }

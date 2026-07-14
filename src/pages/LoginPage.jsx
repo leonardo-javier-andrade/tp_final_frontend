@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import { useAuth } from "../../context/AuthContext.jsx"
-import "../../styles/AuthPages.css"
+import { AuthContext } from "../context/AuthContext.jsx"
+import "../styles/AuthPages.css"
 
 const LoginPage = () => {
   const [email, setEmail] = useState("")
@@ -9,7 +9,7 @@ const LoginPage = () => {
   const [error, setError] = useState("")
   const [submitting, setSubmitting] = useState(false)
 
-  const { login } = useAuth()
+  const { login } = useContext(AuthContext)
   const navigate = useNavigate()
 
   const handleSubmit = async (event) => {

@@ -1,9 +1,10 @@
+import { useContext } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { useAuth } from "../../context/AuthContext.jsx"
-import "../../styles/Navbar.css"
+import { AuthContext } from "../context/AuthContext.jsx"
+import "../styles/Navbar.css"
 
 const Navbar = () => {
-  const { user, logout } = useAuth()
+  const { user, logout } = useContext(AuthContext)
   const navigate = useNavigate()
 
   const handleLogout = () => {

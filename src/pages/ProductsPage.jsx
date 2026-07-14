@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react"
-import { useAuth } from "../../context/AuthContext.jsx"
-import { getProducts, createProduct, updateProduct, deleteProduct } from "../../controllers/productController.js"
+import { useContext, useEffect, useState } from "react"
+import { AuthContext } from "../context/AuthContext.jsx"
+import { getProducts, createProduct, updateProduct, deleteProduct } from "../services/productService.js"
 import { ProductCard } from "../components/ProductCard.jsx"
 import { ProductForm } from "../components/ProductForm.jsx"
-import "../../styles/ProductsPage.css"
+import "../styles/ProductsPage.css"
 
 const ProductsPage = () => {
-  const { user } = useAuth()
+  const { user } = useContext(AuthContext)
   const isAdmin = user?.role === "admin"
 
   const [products, setProducts] = useState([])
@@ -30,7 +30,22 @@ const ProductsPage = () => {
   }
 
   useEffect(() => {
-    loadProducts()
+    let ignore = false
+
+    getProducts()
+      .then((data) => {
+        if (!ignore) setProducts(data)
+      })
+      .catch((err) => {
+        if (!ignore) setError(err.message)
+      })
+      .finally(() => {
+        if (!ignore) setLoading(false)
+      })
+
+    return () => {
+      ignore = true
+    }
   }, [])
 
   const handleFilterSubmit = (event) => {
@@ -109,6 +124,7 @@ const ProductsPage = () => {
 
       <aside className="products-form-panel">
         <ProductForm
+          key={editingProduct?._id ?? "new"}
           initialProduct={editingProduct}
           onSubmit={handleCreateOrUpdate}
           onCancel={() => setEditingProduct(null)}

@@ -1,8 +1,4 @@
-import { registerRequest, loginRequest } from "../models/UserModel.js"
-
-const extractErrorMessage = (error) => {
-  return error.response?.data?.error || "Ocurrió un error inesperado"
-}
+import { post } from "./apiClient.js"
 
 const decodeToken = (token) => {
   try {
@@ -15,26 +11,17 @@ const decodeToken = (token) => {
 }
 
 const register = async (username, email, password) => {
-  try {
-    const response = await registerRequest(username, email, password)
-    return response.data.data
-  } catch (error) {
-    throw new Error(extractErrorMessage(error))
-  }
+  const data = await post("/auth/register", { username, email, password })
+  return data.data
 }
 
 const login = async (email, password) => {
-  try {
-    const response = await loginRequest(email, password)
-    const { token } = response.data.data
+  const data = await post("/auth/login", { email, password })
+  const { token } = data.data
 
-    localStorage.setItem("token", token)
+  localStorage.setItem("token", token)
 
-    const user = decodeToken(token)
-    return user
-  } catch (error) {
-    throw new Error(extractErrorMessage(error))
-  }
+  return decodeToken(token)
 }
 
 const logout = () => {
